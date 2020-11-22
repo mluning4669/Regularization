@@ -1751,8 +1751,9 @@ summary {
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaG91c2luZ19kZiA9IHJlYWQuY3N2KFwiaG91c2luZy5jc3ZcIilbLC0xXVxuYGBgIn0= -->
-<pre class="r"><code>housing_df = read.csv(&quot;housing.csv&quot;)[,-1]</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaG91c2luZ19kZiA9IHJlYWQuY3N2KFwiaG91c2luZy5jc3ZcIilbLC0xXVxuIyMgZmlyc3QgY29sdW1uIGlzIElkIHNvIGl0IGNhbiBiZSByZW1vdmVkXG5gYGAifQ== -->
+<pre class="r"><code>housing_df = read.csv(&quot;housing.csv&quot;)[,-1]
+## first column is Id so it can be removed</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1847,11 +1848,59 @@ summary {
                                                                                        </code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGVuZ3RoKGhvdXNpbmdfZGZbLHNhcHBseShob3VzaW5nX2RmLCBpcy5jaGFyYWN0ZXIpID09IFRSVUVdKSAjIyBOdW1iZXIgb2YgY2F0ZWdvcmljYWwgdmFyaWFibGVzXG5cbmBgYCJ9 -->
+<pre class="r"><code>length(housing_df[,sapply(housing_df, is.character) == TRUE]) ## Number of categorical variables
+</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDQzXG4ifQ== -->
+<pre><code>[1] 43</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGVuZ3RoKGhvdXNpbmdfZGZbLHNhcHBseShob3VzaW5nX2RmLCBpcy5udW1lcmljKSA9PSBUUlVFXSkgIyMgTnVtYmVyIG9mIG51bWVyaWNhbCB2YXJpYWJsZXNcbmBgYCJ9 -->
+<pre class="r"><code>length(housing_df[,sapply(housing_df, is.numeric) == TRUE]) ## Number of numerical variables</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiWzFdIDM3XG4ifQ== -->
+<pre><code>[1] 37</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
+<p><strong>2.</strong> (1pt) Which columns have missing values and what percentage of those columns have NAs? (Note. You can use colMeans(is.na(your data frame)) to find the percentage of NAs in each column).</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWlzc2luZ192YWxzX2NvbHVtbnMgPSB3aGljaChjb2xTdW1zKGlzLm5hKGhvdXNpbmdfZGYpKSA+IDApXG5zb3J0KGNvbFN1bXMoc2FwcGx5KGhvdXNpbmdfZGZbbWlzc2luZ192YWxzX2NvbHVtbnNdLCBpcy5uYSkpLCBkZWNyZWFzaW5nID0gVFJVRSlcbmBgYCJ9 -->
+<pre class="r"><code>missing_vals_columns = which(colSums(is.na(housing_df)) &gt; 0)
+sort(colSums(sapply(housing_df[missing_vals_columns], is.na)), decreasing = TRUE)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgUG9vbFFDICBNaXNjRmVhdHVyZSAgICAgICAgQWxsZXkgICAgICAgIEZlbmNlICBGaXJlcGxhY2VRdSAgTG90RnJvbnRhZ2UgICBHYXJhZ2VUeXBlICBHYXJhZ2VZckJsdCBHYXJhZ2VGaW5pc2ggICBHYXJhZ2VRdWFsICAgR2FyYWdlQ29uZCBCc210RXhwb3N1cmUgXG4gICAgICAgIDE0NTMgICAgICAgICAxNDA2ICAgICAgICAgMTM2OSAgICAgICAgIDExNzkgICAgICAgICAgNjkwICAgICAgICAgIDI1OSAgICAgICAgICAgODEgICAgICAgICAgIDgxICAgICAgICAgICA4MSAgICAgICAgICAgODEgICAgICAgICAgIDgxICAgICAgICAgICAzOCBcbkJzbXRGaW5UeXBlMiAgICAgQnNtdFF1YWwgICAgIEJzbXRDb25kIEJzbXRGaW5UeXBlMSAgIE1hc1ZuclR5cGUgICBNYXNWbnJBcmVhICAgRWxlY3RyaWNhbCBcbiAgICAgICAgICAzOCAgICAgICAgICAgMzcgICAgICAgICAgIDM3ICAgICAgICAgICAzNyAgICAgICAgICAgIDggICAgICAgICAgICA4ICAgICAgICAgICAgMSBcbiJ9 -->
+<pre><code>      PoolQC  MiscFeature        Alley        Fence  FireplaceQu  LotFrontage   GarageType  GarageYrBlt GarageFinish   GarageQual   GarageCond BsmtExposure 
+        1453         1406         1369         1179          690          259           81           81           81           81           81           38 
+BsmtFinType2     BsmtQual     BsmtCond BsmtFinType1   MasVnrType   MasVnrArea   Electrical 
+          38           37           37           37            8            8            1 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>The above columns have missing values</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubWVhbnMgPSBjb2xNZWFucyhzYXBwbHkoaG91c2luZ19kZlttaXNzaW5nX3ZhbHNfY29sdW1uc10sIGlzLm5hKSlcbm5ld21lYW5zID0gYXMubnVtZXJpYyhzcHJpbnRmKFwiJTIuM2ZcIiwgbWVhbnMpKSAqIDEwMFxubmFtZXMobmV3bWVhbnMpID0gbmFtZXMobWVhbnMpXG5zb3J0KG5ld21lYW5zLCBkZWNyZWFzaW5nID0gVFJVRSlcbmBgYCJ9 -->
+<pre class="r"><code>means = colMeans(sapply(housing_df[missing_vals_columns], is.na))
+newmeans = as.numeric(sprintf(&quot;%2.3f&quot;, means)) * 100
+names(newmeans) = names(means)
+sort(newmeans, decreasing = TRUE)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgUG9vbFFDICBNaXNjRmVhdHVyZSAgICAgICAgQWxsZXkgICAgICAgIEZlbmNlICBGaXJlcGxhY2VRdSAgTG90RnJvbnRhZ2UgICBHYXJhZ2VUeXBlICBHYXJhZ2VZckJsdCBHYXJhZ2VGaW5pc2ggICBHYXJhZ2VRdWFsICAgR2FyYWdlQ29uZCBCc210RXhwb3N1cmUgXG4gICAgICAgIDk5LjUgICAgICAgICA5Ni4zICAgICAgICAgOTMuOCAgICAgICAgIDgwLjggICAgICAgICA0Ny4zICAgICAgICAgMTcuNyAgICAgICAgICA1LjUgICAgICAgICAgNS41ICAgICAgICAgIDUuNSAgICAgICAgICA1LjUgICAgICAgICAgNS41ICAgICAgICAgIDIuNiBcbkJzbXRGaW5UeXBlMiAgICAgQnNtdFF1YWwgICAgIEJzbXRDb25kIEJzbXRGaW5UeXBlMSAgIE1hc1ZuclR5cGUgICBNYXNWbnJBcmVhICAgRWxlY3RyaWNhbCBcbiAgICAgICAgIDIuNiAgICAgICAgICAyLjUgICAgICAgICAgMi41ICAgICAgICAgIDIuNSAgICAgICAgICAwLjUgICAgICAgICAgMC41ICAgICAgICAgIDAuMSBcbiJ9 -->
+<pre><code>      PoolQC  MiscFeature        Alley        Fence  FireplaceQu  LotFrontage   GarageType  GarageYrBlt GarageFinish   GarageQual   GarageCond BsmtExposure 
+        99.5         96.3         93.8         80.8         47.3         17.7          5.5          5.5          5.5          5.5          5.5          2.6 
+BsmtFinType2     BsmtQual     BsmtCond BsmtFinType1   MasVnrType   MasVnrArea   Electrical 
+         2.6          2.5          2.5          2.5          0.5          0.5          0.1 </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>The above are the % NAs in each column with NAs</p>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiSGFuZHMgb24gd2l0aCBSZWd1bGFyaXphdGlvbiBhbmQgVHJlZSBiYXNlZCBNb2RlbCBFbnNlbWJsZSIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKCmBgYHtyfQpob3VzaW5nX2RmID0gcmVhZC5jc3YoImhvdXNpbmcuY3N2IilbLC0xXQojIyBmaXJzdCBjb2x1bW4gaXMgSWQgc28gaXQgY2FuIGJlIHJlbW92ZWQKYGBgCgojIyBTZWN0aW9uIDEuIERhdGEgQ2xlYW5pbmcKCl9fMS5fXyBUYWtlIGEgc3VtbWFyeSBvZiB0aGUgZGF0YSBhbmQgZXhwbG9yZSB0aGUgcmVzdWx0LiBIb3cgbWFueSBjYXRlZ29yaWNhbCBhbmQgbnVtZXJpY2FsIHZhcmlhYmxlcyBhcmUKdGhlcmUgaW4gdGhlIGRhdGFzZXQ/CgpgYGB7cn0Kc3VtbWFyeShob3VzaW5nX2RmKQpgYGAKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiSGFuZHMgb24gd2l0aCBSZWd1bGFyaXphdGlvbiBhbmQgVHJlZSBiYXNlZCBNb2RlbCBFbnNlbWJsZSIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKCmBgYHtyfQpob3VzaW5nX2RmID0gcmVhZC5jc3YoImhvdXNpbmcuY3N2IilbLC0xXQojIyBmaXJzdCBjb2x1bW4gaXMgSWQgc28gaXQgY2FuIGJlIHJlbW92ZWQKYGBgCgojIyBTZWN0aW9uIDEuIERhdGEgQ2xlYW5pbmcKCl9fMS5fXyBUYWtlIGEgc3VtbWFyeSBvZiB0aGUgZGF0YSBhbmQgZXhwbG9yZSB0aGUgcmVzdWx0LiBIb3cgbWFueSBjYXRlZ29yaWNhbCBhbmQgbnVtZXJpY2FsIHZhcmlhYmxlcyBhcmUKdGhlcmUgaW4gdGhlIGRhdGFzZXQ/CgpgYGB7cn0Kc3VtbWFyeShob3VzaW5nX2RmKQpgYGAKYGBge3J9Cmxlbmd0aChob3VzaW5nX2RmWyxzYXBwbHkoaG91c2luZ19kZiwgaXMuY2hhcmFjdGVyKSA9PSBUUlVFXSkgIyMgTnVtYmVyIG9mIGNhdGVnb3JpY2FsIHZhcmlhYmxlcwpsZW5ndGgoaG91c2luZ19kZlssc2FwcGx5KGhvdXNpbmdfZGYsIGlzLm51bWVyaWMpID09IFRSVUVdKSAjIyBOdW1iZXIgb2YgbnVtZXJpY2FsIHZhcmlhYmxlcwpgYGAKCl9fMi5fXyAoMXB0KSBXaGljaCBjb2x1bW5zIGhhdmUgbWlzc2luZyB2YWx1ZXMgYW5kIHdoYXQgcGVyY2VudGFnZSBvZiB0aG9zZSBjb2x1bW5zIGhhdmUgTkFzPyAoTm90ZS4KWW91IGNhbiB1c2UgY29sTWVhbnMoaXMubmEoeW91ciBkYXRhIGZyYW1lKSkgdG8gZmluZCB0aGUgcGVyY2VudGFnZSBvZiBOQXMgaW4gZWFjaCBjb2x1bW4pLgpgYGB7cn0KbWlzc2luZ192YWxzX2NvbHVtbnMgPSB3aGljaChjb2xTdW1zKGlzLm5hKGhvdXNpbmdfZGYpKSA+IDApCnNvcnQoY29sU3VtcyhzYXBwbHkoaG91c2luZ19kZlttaXNzaW5nX3ZhbHNfY29sdW1uc10sIGlzLm5hKSksIGRlY3JlYXNpbmcgPSBUUlVFKQpgYGAKVGhlIGFib3ZlIGNvbHVtbnMgaGF2ZSBtaXNzaW5nIHZhbHVlcwpgYGB7cn0KbWVhbnMgPSBjb2xNZWFucyhzYXBwbHkoaG91c2luZ19kZlttaXNzaW5nX3ZhbHNfY29sdW1uc10sIGlzLm5hKSkKbmV3bWVhbnMgPSBhcy5udW1lcmljKHNwcmludGYoIiUyLjNmIiwgbWVhbnMpKSAqIDEwMApuYW1lcyhuZXdtZWFucykgPSBuYW1lcyhtZWFucykKc29ydChuZXdtZWFucywgZGVjcmVhc2luZyA9IFRSVUUpCmBgYApUaGUgYWJvdmUgYXJlIHRoZSAlIE5BcyBpbiBlYWNoIGNvbHVtbiB3aXRoIE5Bcwo=</div>
 
 
 

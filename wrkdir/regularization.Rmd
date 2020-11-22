@@ -17,4 +17,22 @@ there in the dataset?
 ```{r}
 summary(housing_df)
 ```
+```{r}
+length(housing_df[,sapply(housing_df, is.character) == TRUE]) ## Number of categorical variables
+length(housing_df[,sapply(housing_df, is.numeric) == TRUE]) ## Number of numerical variables
+```
 
+__2.__ (1pt) Which columns have missing values and what percentage of those columns have NAs? (Note.
+You can use colMeans(is.na(your data frame)) to find the percentage of NAs in each column).
+```{r}
+missing_vals_columns = which(colSums(is.na(housing_df)) > 0)
+sort(colSums(sapply(housing_df[missing_vals_columns], is.na)), decreasing = TRUE)
+```
+The above columns have missing values
+```{r}
+means = colMeans(sapply(housing_df[missing_vals_columns], is.na))
+newmeans = as.numeric(sprintf("%2.3f", means)) * 100
+names(newmeans) = names(means)
+sort(newmeans, decreasing = TRUE)
+```
+The above are the % NAs in each column with NAs
