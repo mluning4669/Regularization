@@ -58,8 +58,8 @@ instance, “notApplicable” if that variable is categorical.
 
 ```{r}
 # Cleaning categorical variables
-cat_columns = (sapply(housing_df, is.character) == TRUE) & (colSums(is.na(housing_df)) > 0)
-new_columns = lapply(names(housing_df[,cat_columns]), function(x){
+cat_columns = c("Alley","BsmtQual","BsmtCond","BsmtExposure","BsmtFinType1","BsmtFinType2","FireplaceQu","GarageType","GarageFinish","GarageQual","GarageCond","PoolQC","Fence","MiscFeature")
+new_columns = lapply(cat_columns, function(x){
   housing_df[is.na(housing_df[,x]),x] <<- "notApplicable"
 })
 
@@ -68,5 +68,23 @@ num_columns = (sapply(housing_df, is.numeric) == TRUE) & (colSums(is.na(housing_
 new_columns = lapply(names(housing_df[,num_columns]), function(x){
   housing_df[is.na(housing_df[,x]),x] <<- 0
 })
+```
+
+__5.__ (1pt) After replacing not applicable NAs with appropriate values, find out which columns still
+have NAs and what percentage of each column is missing.
+
+```{r}
+missing_vals_columns = which(colSums(is.na(housing_df)) > 0)
+means = colMeans(sapply(housing_df[missing_vals_columns], is.na))
+newmeans = as.numeric(sprintf("%2.3f", means)) * 100
+names(newmeans) = names(means)
+sort(newmeans, decreasing = TRUE)
+```
+
+__6.__ (1pt) what percentage of rows in the dataset have one or more missing values? Use
+“complete.cases” function to answer this question.
+
+```{r}
+
 ```
 
