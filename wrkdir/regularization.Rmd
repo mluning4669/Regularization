@@ -85,6 +85,7 @@ __6.__ (1pt) what percentage of rows in the dataset have one or more missing val
 “complete.cases” function to answer this question.
 
 ```{r}
-
+missing_count = length(which(!complete.cases(housing_df)))
+as.numeric(sprintf("%2.3f",missing_count/1399)) * 100 # 1399 is the number of observations in the data frame
 ```
-
+0.6% of rows have missing values
