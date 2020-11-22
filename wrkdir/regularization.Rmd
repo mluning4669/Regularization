@@ -36,3 +36,22 @@ names(newmeans) = names(means)
 sort(newmeans, decreasing = TRUE)
 ```
 The above are the % NAs in each column with NAs
+
+__3.__ Is there any obvious outlier in the SalePrice? If so, remove them
+```{r}
+## Before transformation
+str(housing_df$SalePrice)
+first_quant = quantile(housing_df$SalePrice)[2]
+third_quant = quantile(housing_df$SalePrice)[4]
+iqr = third_quant - first_quant
+iqr_index = (housing_df$SalePrice > first_quant - 1.5*iqr & housing_df$SalePrice < third_quant + 1.5*iqr)
+housing_df = housing_df[iqr_index, ]
+## After transformation
+str(housing_df$SalePrice)
+```
+
+__4.__ (2pt)Read the data description carefully. For some of the variables, such as PoolQC, FirePlaceQU,
+Fence, etc. NA means not applicable rather than missing at random. For instance, a house that does
+not have a pool gets NA for PoolQC. For those variables for which NA means not applicable, you
+can replace NA with zero ( if that variable is numeric) or replace it with a new category/level, for
+instance, “notApplicable” if that variable is categorical.
