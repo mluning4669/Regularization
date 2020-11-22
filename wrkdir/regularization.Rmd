@@ -55,3 +55,18 @@ Fence, etc. NA means not applicable rather than missing at random. For instance,
 not have a pool gets NA for PoolQC. For those variables for which NA means not applicable, you
 can replace NA with zero ( if that variable is numeric) or replace it with a new category/level, for
 instance, “notApplicable” if that variable is categorical.
+
+```{r}
+# Cleaning categorical variables
+cat_columns = (sapply(housing_df, is.character) == TRUE) & (colSums(is.na(housing_df)) > 0)
+new_columns = lapply(names(housing_df[,cat_columns]), function(x){
+  housing_df[is.na(housing_df[,x]),x] <<- "notApplicable"
+})
+
+# Cleaning numerical variables
+num_columns = (sapply(housing_df, is.numeric) == TRUE) & (colSums(is.na(housing_df)) > 0)
+new_columns = lapply(names(housing_df[,num_columns]), function(x){
+  housing_df[is.na(housing_df[,x]),x] <<- 0
+})
+```
+
