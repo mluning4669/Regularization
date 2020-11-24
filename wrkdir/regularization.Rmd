@@ -89,3 +89,64 @@ missing_count = length(which(!complete.cases(housing_df)))
 as.numeric(sprintf("%2.3f",missing_count/1399)) * 100 # 1399 is the number of observations in the data frame
 ```
 0.6% of rows have missing values
+
+## Section 2. Data Exploration
+
+__8.__ (1pt) plot the histogram of SalePrice. Interpret the histogram. Is SalePrice variable skewed?
+To replace SalePrice with log(SalePrice. Compare the histogram of salesprice before and after log
+transformation.
+
+```{r}
+hist(housing_df$SalePrice, xlab = "SalePrice", main = "Sale Price")
+```
+Yes, the SalePrice variable is right skewed
+
+```{r}
+hist(log(housing_df$SalePrice), xlab = "Log SalePrice", main = "Sale Price")
+```
+
+The histogram of Log SalePrice is left skewed.
+
+__9.__ (2 pt) Use plot (SalePrice~. , data=housing) (replace housing with your dataframe after data
+cleaning) to draw scatter and side by side box plots of other variables against the Sale Price. From these
+plots, what variables seem to have correlation with SalePrice? (Note since we have so many variables,
+you do not need to use statistics tests, you can just answer this question based on your observations of
+the plots)
+
+```{r}
+attach(housing_df)
+```
+
+The plots for categorical variables
+```{r}
+colName = names(housing_df)
+temp = lapply(colName, function(col) {
+  if (is.character(housing_df[,col])) {
+      plot(SalePrice ~ as.factor(housing_df[,col]), xlab = col)
+  }
+  })
+
+non_scatter = c("MSSubClass","OverallQual","OverallCond","BsmtFullBath","BsmtFullBath","FullBath","HalfBath","BedroomAbvGr","KitchenAbvGr","TotRmsAbvGrd","Fireplaces","GarageCars","MoSold","YrSold")
+
+temp1 = lapply(non_scatter, function(col) {
+      plot(SalePrice ~ as.factor(housing_df[,col]), xlab = col)
+})
+```
+The scatter plots for numeric variables
+```{r}
+col_name = names(housing_df)
+
+scatter_cols = setdiff(col_name, non_scatter)
+
+temp = lapply(scatter_cols, function(col) {
+  if (is.numeric(housing_df[,col]) & col != "SalePrice") {
+      plot(SalePrice ~ housing_df[,col], xlab = col)
+  }
+  return()
+  })
+
+```
+```{r}
+
+```
+
