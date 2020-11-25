@@ -18,8 +18,8 @@ there in the dataset?
 summary(housing_df)
 ```
 ```{r}
-length(housing_df[,sapply(housing_df, is.character) == TRUE]) ## Number of categorical variables
-length(housing_df[,sapply(housing_df, is.numeric) == TRUE]) ## Number of numerical variables
+length(housing_df[,sapply(housing_df, is.character)]) ## Number of categorical variables
+length(housing_df[,sapply(housing_df, is.numeric)]) ## Number of numerical variables
 ```
 
 __2.__ (1pt) Which columns have missing values and what percentage of those columns have NAs? (Note.
@@ -131,7 +131,7 @@ temp = lapply(colName, function(col) {
   }
   })
 
-non_scatter = c("MSSubClass","OverallQual","OverallCond","BsmtFullBath","BsmtFullBath","FullBath","HalfBath","BedroomAbvGr","KitchenAbvGr","TotRmsAbvGrd","Fireplaces","GarageCars","MoSold","YrSold","")
+non_scatter = c("MSSubClass","OverallQual","OverallCond","BsmtFullBath","BsmtFullBath","FullBath","HalfBath","BedroomAbvGr","KitchenAbvGr","TotRmsAbvGrd","Fireplaces","GarageCars","MoSold","YrSold")
 
 temp1 = lapply(non_scatter, function(col) {
       chisq_temp = chisq.test(SalePrice, as.factor(housing_df[,col]))
@@ -166,3 +166,37 @@ correlated_variables
 
 __10.__ (2 pt) Examine the columns with missing values to see if any of them are categorical.
 Use caret’s createDataPartition method to partition the dataset to 80% training and 20% testing. If a categorical column has missing values in train or test data, impute it with the mode of that column in the training data. It is important that the mode is computed based only on the training data only (instead of the entire dataset) to avoid data leakage.
+
+These are the categorical columns with missing values
+```{r}
+which(colSums(is.na(housing_df)) > 0 & sapply(housing_df, is.character))
+```
+```{r}
+library(caret)
+```
+
+
+```{r}
+# creating data partition
+test_indexes = createDataPartition(y = housing_df$SalePrice, p = 0.8)
+test_data = housing_df[test_indexes$Resample1, ]
+train_data = housing_df[-test_indexes$Resample1, ]
+```
+
+```{r}
+# define getmode
+getmode <- function(v) {
+   uniqv <- unique(v)
+   uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+```
+
+```{r}
+# Impute test data
+masVnrType_na = is.na(test_data$MasVnrType)
+electrical_na = is.na(test_data$Electrical)
+
+test_data$MasVnrType[masVnrType_na] = getmode(test_data$MasVnrType)
+test_data$Electrical[electrical_na] = getmode(test_data$Electrical)
+```
+
