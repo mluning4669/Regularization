@@ -120,15 +120,24 @@ attach(housing_df)
 The plots for categorical variables
 ```{r}
 colName = names(housing_df)
+correlated_variables = vector(mode = "character")
 temp = lapply(colName, function(col) {
   if (is.character(housing_df[,col])) {
+      chisq_temp = chisq.test(SalePrice, as.factor(housing_df[,col]))
+      if (chisq_temp$p.value < 0.006) {
+        correlated_variables <<- append(correlated_variables, col)
+      }
       plot(SalePrice ~ as.factor(housing_df[,col]), xlab = col)
   }
   })
 
-non_scatter = c("MSSubClass","OverallQual","OverallCond","BsmtFullBath","BsmtFullBath","FullBath","HalfBath","BedroomAbvGr","KitchenAbvGr","TotRmsAbvGrd","Fireplaces","GarageCars","MoSold","YrSold")
+non_scatter = c("MSSubClass","OverallQual","OverallCond","BsmtFullBath","BsmtFullBath","FullBath","HalfBath","BedroomAbvGr","KitchenAbvGr","TotRmsAbvGrd","Fireplaces","GarageCars","MoSold","YrSold","")
 
 temp1 = lapply(non_scatter, function(col) {
+      chisq_temp = chisq.test(SalePrice, as.factor(housing_df[,col]))
+      if (chisq_temp$p.value < 0.006) {
+        correlated_variables <<- append(correlated_variables, col)
+      }
       plot(SalePrice ~ as.factor(housing_df[,col]), xlab = col)
 })
 ```
@@ -140,13 +149,20 @@ scatter_cols = setdiff(col_name, non_scatter)
 
 temp = lapply(scatter_cols, function(col) {
   if (is.numeric(housing_df[,col]) & col != "SalePrice") {
+      cor_temp = cor.test(SalePrice, housing_df[,col])
+      if (cor_temp$estimate >= 0.5 | cor_temp$estimate <= -0.5) {
+        correlated_variables <<- append(correlated_variables, col)
+      }
       plot(SalePrice ~ housing_df[,col], xlab = col)
   }
   return()
   })
 
 ```
+Below are the variables I've interpreted to be correlated with SalePrice
 ```{r}
-
+correlated_variables
 ```
 
+__10.__ (2 pt) Examine the columns with missing values to see if any of them are categorical.
+Use caret’s createDataPartition method to partition the dataset to 80% training and 20% testing. If a categorical column has missing values in train or test data, impute it with the mode of that column in the training data. It is important that the mode is computed based only on the training data only (instead of the entire dataset) to avoid data leakage.
